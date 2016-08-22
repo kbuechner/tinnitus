@@ -1,0 +1,17 @@
+{
+  "name": "tinnitus",
+  "version": "1.0.0",
+  "description": "an app to help diagnose and potentially relieve tinnitus in adults",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hearing",
+    "hearing",
+    "loss",
+    "tinnitus"
+  ],
+  "author": "k buechner",
+  "license": "ISC"
+}

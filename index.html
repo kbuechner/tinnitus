@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="node_modules/bootstrap-slider/dist/css/bootstrap-slider.css">
+
+
+	<!-- javascript files -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script src="bootstrap/js/bootstrap.min.js"></script>
+	<script type = "text/javascript" src = "node_modules/bootstrap-slider/dist/bootstrap-slider.js"></script>
+	<script type="text/javascript" src = "node_modules/tone/build/Tone.js"></script>
+    <script type="text/javascript" src = "node_modules/web-audio-daw/build/wad.min.js"></script>
+    <script type="text/javascript" src="node_modules/nexusui/dist/nexusUI.min.js"></script>
+
+    <script>
+			var sine = new Tone.Oscillator({
+				"frequency" : 440,
+				"volume" : -10
+			}).toMaster();
+
+			// var phaser = new Tone.Phaser({
+			// 	"wet" : 0;
+			// }).toMaster();
+
+			// var panner = new Tone.AutoPanner().toMaster();
+			// panner.wet.value=0;
+			
+			var masking = new Tone.Noise('white');
+	   		var notchFilter = new Tone.Filter({ 
+				"frequency" : 440,
+				"type" : 'notch' 
+			}).connect(Tone.Master);
+			masking.connect(notchFilter);
+			
+			
+			var source = new Tone.Player({ 
+				"url" : 'http://picosong.com/cdn/7639bf6ad4ba5eb5226686e62beb161c.mp3', 
+				"autostart" : false}).connect(notchFilter)
+			
+
+			nx.onload = function() {
+			toggle1.on('*', function(data) {
+				if (data.value) {
+					sine.start()
+				} else {
+					sine.stop()
+				}
+			})
+			toggle2.on('*', function(data){
+				if(data.value){
+					masking.start();
+				}
+				else{
+					masking.stop();
+				}
+			})
+			}
+	</script>
+
+<title> Tinnitus diagnosis and notched-music therapy </title>
+</head>
+<body>
+      <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+          </div>
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="https://upload.wikimedia.org/wikipedia/commons/0/0d/Blausen_0328_EarAnatomy.png">What is Tinnitus?</a></li>
+			  <li><a href="http://www.radiosparks.com/images_d/FINO976.jpg">Sound Therapy & Notch Filters</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Further Reading<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="https://www.ata.org/">American Tinnitus Association</a></li>
+                  <li><a href="http://www.nytimes.com/2010/01/05/science/05obhear.html?ref=science">Origins of Notched Sound Therapy</a></li>
+                  <li><a href="http://www.mayoclinic.org/diseases-conditions/tinnitus/home/ovc-20180349">Mayo Clinic Tinnitus Resources</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li class="dropdown-header">Other Resources</li>
+                  <li><a href="http://www.hearingloss.org/">Hearing Loss association of America</a></li>
+                </ul>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+              <li><a href="http://tonejs.org/docs">Check out Tone.js!</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div><!--/.container-fluid -->
+      </nav>
+
+    <div class="container">
+
+      <div class="starter-template">
+        <h1>Tinnitus and Notched Music Therapy</h1>
+        <p class="lead">Roughly 15% of the general public has experienced some form of tinnitus, and over 20 million people have chronic tinnitus. While there is no true cure for tinnitus, several audio therapies, including notched music therapy, are a promising new solution. Here, you can test yourself for tinnitus, isolate specific problem frequencies, and explore your theraputic options.
+        </p>
+
+      </div>
+
+      <div>
+      <col-md-8>
+	    <p class="lead">What exactly is tinnitus?</p>
+
+	    <p>Tinnitus is known as "ringing in the ears," but it can also present as wooshing, clicking, buzzing, or whistling. The key feature of tinnitus is that the noises are subjective - they are only percieved by the person experiencing them.</p>
+
+	    <p>While wearing good headphones in a quiet room, make sure you have your volume low, then turn on the tone generator and begin to move the slider. Turn the dial to the left or right to check each ear. As you become accustomed to the sound, you can bring your computer's volume up.</p>
+<div class="col-sm-4">
+	  <div class="panel panel-default">
+	   <div class="panel-heading">Generate tone, pan L/R and adjust pitch:</div>
+	   <div class="panel-body">
+	   <canvas nx="toggle" label="generate"></canvas><br>
+	   <input id="ex15">
+	   <script>
+	   			var freq = new Slider("#ex15", {
+				min: 20,
+				max: 20000,
+				value: 440,
+				tooltip: 'always',
+				tooltip_position: 'bottom',
+				handle: 'square',
+				scale: 'logarithmic'
+			});
+			freq.on('slide', function(value){sine.frequency.value = value; notchFilter.frequency.value=value})
+	   </script>
+	  </div>
+	 </div>
+</div>
+<div class="col-sm-8">
+	<p>
+      As the tone's frequency approaches the frequency of your tinnitus, you may experience a "fluttering" effect, as though the sound is wavering. Once you match the right frequency, you might have a sudden decrease in your tinnitus - this is called "residual inhibition" and can last anywhere from a few seconds to over twenty minutes.
+	</p>
+	<p>
+		It may take a while to find the right frequency, and not every form of tinnitus is pure-tone. Please don't spend any more than ten minutes on each ear. If you can't find it right away, take a break and come back later.
+</div>
+<hr>
+<div id="#SoundTherapy" class="lead">Sound Therapy</div>
+Now that you've found your frequency, you can experiment with some new techniques to help allieviate your tinnitus. First among these is "masking". When you click on the "masking" button below, you'll hear white noise that has been modified to fit your specific frequency. There are some other options available if the standard white noise isn't to your liking.
+<div class="col-sm-4">
+	  <div class="panel panel-default">
+	   <div class="panel-heading">Begin modified pink noise:</div>
+	   <div class="panel-body">
+	   <canvas nx="toggle" label="noise"></canvas> 
+	   <div class="btn-group-vertical">
+		  <button type="button" class="btn btn-default" onclick="masking.type='white'">White</button>
+		  <button type="button" class="btn btn-default" onclick="masking.type='pink'">Pink</button>
+		  <button type="button" class="btn btn-default" onclick="masking.type='brown'">Brownian</button>
+		</div>
+		<div class="btn-group-vertical">
+		  <button type="button" class="btn btn-default" onclick="phaser.wet.value=0; panner.wet.value=0">Plain</button>
+		  <button type="button" class="btn btn-default" onclick="phaser.wet.value=1">Phasing</button>
+		  <button type="button" class="btn btn-default" onclick="panner.wet.value=1">Panning</button>
+		</div>
+	   <script>
+	   		
+	   </script>
+	  </div>
+	 </div>
+</div>
+<div class="col-sm-8">
+	<p>
+     
+	</p>
+	<p>
+		It may take a while to find the right frequency, and not every form of tinnitus is pure-tone. Please don't spend any more than ten minutes on each ear. If you can't find it right away, take a break and come back later.
+</div>
+</div>
+<div>
+Next, we have "Notched Music Therapy". In this case, instead of masking the frequency with broad-spectrum noise, the therapy will remove the frequency from the audio you're listening to. It operates on the same foundation as masking, but you'll be listening to music instead. Paste a link to a sound file and hit "play" below; you'll hear it play as soon as it loads.
+</div>
+
+	  <div class="panel panel-default">
+	  	<div class="panel-heading">
+	  	<form role="form">
+	  	<div class="form-group">
+  			<label for="audio">Source:</label>
+  			<input type="url" class="form-control" id="audio" value="Audio URL">
+		</div>
+		<button type="submit" class="btn btn-default" onclick="source.start()">Start</button>
+		</div> 
+		</form>
+	
+	 </div>
+</div>
+<div class = "col-sm-4"></div>
+</body>
+</html>
+
